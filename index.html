@@ -105,32 +105,32 @@ button{
 </head>
 <body>
 
-<!-- LOGO ABOVE FORM -->
 <div class="logo">
     <img src="logo.png" alt="Company Logo">
 </div>
 
 <h2 style="text-align:center;">Leave Application Form Entry</h2>
 
-<div class="form-container">
+<form class="form-container" id="leaveForm" onsubmit="generate(event)">
 
 <label>Name of Employee</label>
-<input type="text" id="name">
+<input type="text" id="name" required>
 
 <label>Employment Status</label>
-<input type="text" id="status">
+<input type="text" id="status" required>
 
 <label>Designation</label>
-<input type="text" id="designation">
+<input type="text" id="designation" required>
 
 <label>Area/Division</label>
-<input type="text" id="division">
+<input type="text" id="division" required>
 
 <label>Date Filed</label>
-<input type="date" id="datefiled">
+<input type="date" id="datefiled" required>
 
 <label>Nature of Leave</label>
-<select id="nature">
+<select id="nature" required>
+    <option value="">-- Select Leave Type --</option>
     <option>Vacation Leave</option>
     <option>Sick Leave</option>
     <option>Maternity/Paternity Leave</option>
@@ -138,42 +138,40 @@ button{
 </select>
 
 <label>With Pay / Without Pay</label>
-<select id="paytype">
+<select id="paytype" required>
+    <option value="">-- Select Pay Type --</option>
     <option>With Pay</option>
     <option>Without Pay</option>
 </select>
 
 <label>From</label>
-<input type="date" id="from">
+<input type="date" id="from" required>
 
 <label>To</label>
-<input type="date" id="to">
+<input type="date" id="to" required>
 
 <label>Total Leave Days</label>
-<input type="number" id="days">
+<input type="number" id="days" min="1" required>
 
 <label>Total Hours</label>
-<input type="number" id="hours">
+<input type="number" id="hours" min="0" required>
 
 <label>Reason</label>
-<textarea id="reason"></textarea>
+<textarea id="reason" required></textarea>
 
 <label>Supervisor Name</label>
-<input type="text" id="supervisor">
+<input type="text" id="supervisor" required>
 
 <label>President/CEO Name</label>
-<input type="text" id="ceo">
+<input type="text" id="ceo" required>
 
-<button onclick="generate()">Generate & Print</button>
+<button type="submit">Generate & Print</button>
 
-</div>
+</form>
 
-
-<!-- ================= PRINT DOCUMENT ================= -->
 
 <div class="print-area" id="printArea">
 
-<!-- LOGO IN PRINT -->
 <div class="print-logo">
     <img src="logo.png" alt="Company Logo">
 </div>
@@ -245,6 +243,7 @@ President/CEO
 
 
 <script>
+
 function formatDate(dateStr){
     if(!dateStr) return "";
     const d = new Date(dateStr);
@@ -255,55 +254,73 @@ function formatDate(dateStr){
     });
 }
 
-function generate(){
+function generate(event){
 
-document.getElementById("p_name").innerText =
-document.getElementById("name").value.toUpperCase();
+    event.preventDefault();
 
-document.getElementById("p_name2").innerText =
-document.getElementById("name").value.toUpperCase();
+    const form = document.getElementById("leaveForm");
 
-document.getElementById("p_status").innerText =
-document.getElementById("status").value;
+    if(!form.checkValidity()){
+        alert("Please complete all required fields before generating the leave form.");
+        return;
+    }
 
-document.getElementById("p_designation").innerText =
-document.getElementById("designation").value;
+    const fromDate = new Date(document.getElementById("from").value);
+    const toDate = new Date(document.getElementById("to").value);
 
-document.getElementById("p_division").innerText =
-document.getElementById("division").value;
+    if(toDate < fromDate){
+        alert("End date cannot be earlier than start date.");
+        return;
+    }
 
-document.getElementById("p_datefiled").innerText =
-formatDate(document.getElementById("datefiled").value);
+    document.getElementById("p_name").innerText =
+    document.getElementById("name").value.toUpperCase();
 
-document.getElementById("p_nature").innerText =
-document.getElementById("nature").value + " - " +
-document.getElementById("paytype").value;
+    document.getElementById("p_name2").innerText =
+    document.getElementById("name").value.toUpperCase();
 
-document.getElementById("p_from").innerText =
-formatDate(document.getElementById("from").value);
+    document.getElementById("p_status").innerText =
+    document.getElementById("status").value;
 
-document.getElementById("p_to").innerText =
-formatDate(document.getElementById("to").value);
+    document.getElementById("p_designation").innerText =
+    document.getElementById("designation").value;
 
-document.getElementById("p_days").innerText =
-document.getElementById("days").value + " Day(s)";
+    document.getElementById("p_division").innerText =
+    document.getElementById("division").value;
 
-document.getElementById("p_hours").innerText =
-document.getElementById("hours").value + " Hour(s)";
+    document.getElementById("p_datefiled").innerText =
+    formatDate(document.getElementById("datefiled").value);
 
-document.getElementById("p_reason").innerText =
-document.getElementById("reason").value;
+    document.getElementById("p_nature").innerText =
+    document.getElementById("nature").value + " - " +
+    document.getElementById("paytype").value;
 
-document.getElementById("p_supervisor").innerText =
-document.getElementById("supervisor").value;
+    document.getElementById("p_from").innerText =
+    formatDate(document.getElementById("from").value);
 
-document.getElementById("p_ceo").innerText =
-document.getElementById("ceo").value;
+    document.getElementById("p_to").innerText =
+    formatDate(document.getElementById("to").value);
 
-document.getElementById("printArea").style.display="block";
+    document.getElementById("p_days").innerText =
+    document.getElementById("days").value + " Day(s)";
 
-window.print();
+    document.getElementById("p_hours").innerText =
+    document.getElementById("hours").value + " Hour(s)";
+
+    document.getElementById("p_reason").innerText =
+    document.getElementById("reason").value;
+
+    document.getElementById("p_supervisor").innerText =
+    document.getElementById("supervisor").value;
+
+    document.getElementById("p_ceo").innerText =
+    document.getElementById("ceo").value;
+
+    document.getElementById("printArea").style.display="block";
+
+    window.print();
 }
+
 </script>
 
 </body>
