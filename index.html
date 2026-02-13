@@ -10,7 +10,6 @@ body{
     margin: 20px;
 }
 
-/* ================= LOGO ================= */
 .logo{
     text-align:center;
     margin-bottom:10px;
@@ -20,7 +19,6 @@ body{
     height:90px;
 }
 
-/* ================= FORM STYLE ================= */
 .form-container{
     max-width:800px;
     margin:auto;
@@ -44,7 +42,6 @@ button{
     cursor:pointer;
 }
 
-/* ================= PRINT LAYOUT ================= */
 .print-area{
     display:none;
     width:900px;
@@ -87,7 +84,6 @@ button{
     height:90px;
 }
 
-/* ================= PRINT SETTINGS ================= */
 @media print{
     body *{
         visibility:hidden;
@@ -151,7 +147,7 @@ button{
 <input type="date" id="to" required>
 
 <label>Total Leave Days</label>
-<input type="number" id="days" min="1" required>
+<input type="number" id="days" min="0.5" step="0.5" required>
 
 <label>Total Hours</label>
 <input type="number" id="hours" min="0" required>
@@ -273,48 +269,50 @@ function generate(event){
         return;
     }
 
-    document.getElementById("p_name").innerText =
-    document.getElementById("name").value.toUpperCase();
-
-    document.getElementById("p_name2").innerText =
-    document.getElementById("name").value.toUpperCase();
-
-    document.getElementById("p_status").innerText =
-    document.getElementById("status").value;
-
-    document.getElementById("p_designation").innerText =
-    document.getElementById("designation").value;
-
-    document.getElementById("p_division").innerText =
-    document.getElementById("division").value;
-
-    document.getElementById("p_datefiled").innerText =
-    formatDate(document.getElementById("datefiled").value);
-
-    document.getElementById("p_nature").innerText =
-    document.getElementById("nature").value + " - " +
-    document.getElementById("paytype").value;
-
-    document.getElementById("p_from").innerText =
-    formatDate(document.getElementById("from").value);
-
-    document.getElementById("p_to").innerText =
-    formatDate(document.getElementById("to").value);
+    const daysValue = parseFloat(document.getElementById("days").value);
 
     document.getElementById("p_days").innerText =
-    document.getElementById("days").value + " Day(s)";
+        daysValue + (daysValue === 1 ? " Day" : " Days");
+
+    document.getElementById("p_name").innerText =
+        document.getElementById("name").value.toUpperCase();
+
+    document.getElementById("p_name2").innerText =
+        document.getElementById("name").value.toUpperCase();
+
+    document.getElementById("p_status").innerText =
+        document.getElementById("status").value;
+
+    document.getElementById("p_designation").innerText =
+        document.getElementById("designation").value;
+
+    document.getElementById("p_division").innerText =
+        document.getElementById("division").value;
+
+    document.getElementById("p_datefiled").innerText =
+        formatDate(document.getElementById("datefiled").value);
+
+    document.getElementById("p_nature").innerText =
+        document.getElementById("nature").value + " - " +
+        document.getElementById("paytype").value;
+
+    document.getElementById("p_from").innerText =
+        formatDate(document.getElementById("from").value);
+
+    document.getElementById("p_to").innerText =
+        formatDate(document.getElementById("to").value);
 
     document.getElementById("p_hours").innerText =
-    document.getElementById("hours").value + " Hour(s)";
+        document.getElementById("hours").value + " Hour(s)";
 
     document.getElementById("p_reason").innerText =
-    document.getElementById("reason").value;
+        document.getElementById("reason").value;
 
     document.getElementById("p_supervisor").innerText =
-    document.getElementById("supervisor").value;
+        document.getElementById("supervisor").value;
 
     document.getElementById("p_ceo").innerText =
-    document.getElementById("ceo").value;
+        document.getElementById("ceo").value;
 
     document.getElementById("printArea").style.display="block";
 
