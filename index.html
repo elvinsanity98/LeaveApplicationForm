@@ -1,4 +1,471 @@
-"grammar-error-17" class="grammar-error" data-suggestion="No suggestions">"cm-gap" style="height: 9360px;">
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Leave Application Generator</title>
+<style>
+/* ─── GLOBAL RESET & BASE ─── */
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+body{
+    font-family:'Segoe UI', Arial, sans-serif;
+    background:linear-gradient(135deg,#e8f0fe 0%,#f5f8ff 50%,#dce7f9 100%);
+    min-height:100vh;
+    padding:30px 20px;
+    color:#1a1a2e;
+}
+
+/* ─── HEADER / LOGO ─── */
+.logo{
+    text-align:center;
+    margin-bottom:8px;
+}
+.logo img{
+    height:90px;
+    filter:drop-shadow(0 2px 6px rgba(0,51,102,.15));
+}
+.page-title{
+    text-align:center;
+    font-size:26px;
+    font-weight:700;
+    color:#003366;
+    margin-bottom:6px;
+    letter-spacing:.5px;
+}
+.page-subtitle{
+    text-align:center;
+    font-size:13px;
+    color:#5a7da8;
+    margin-bottom:24px;
+    font-weight:400;
+}
+
+/* ─── FORM CARD ─── */
+.form-container{
+    max-width:780px;
+    margin:0 auto 40px;
+    background:#ffffff;
+    border-radius:16px;
+    padding:36px 40px 30px;
+    box-shadow:
+        0 4px 24px rgba(0,51,102,.08),
+        0 1px 4px rgba(0,51,102,.06);
+    border-top:4px solid #1a73e8;
+}
+
+/* ─── SECTION DIVIDERS ─── */
+.section-heading{
+    font-size:15px;
+    font-weight:700;
+    color:#1a73e8;
+    text-transform:uppercase;
+    letter-spacing:1.2px;
+    margin:24px 0 14px;
+    padding-bottom:8px;
+    border-bottom:2px solid #d2e3fc;
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+.section-heading::before{
+    content:'';
+    display:inline-block;
+    width:4px;
+    height:18px;
+    background:#1a73e8;
+    border-radius:2px;
+}
+.section-heading:first-of-type{
+    margin-top:0;
+}
+
+/* ─── FIELD GRID ─── */
+.field-row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:0 24px;
+}
+.field-row.full{
+    grid-template-columns:1fr;
+}
+.field-group{
+    margin-bottom:18px;
+}
+
+/* ─── LABELS ─── */
+label{
+    display:block;
+    font-size:13px;
+    font-weight:600;
+    color:#3c4858;
+    margin-bottom:5px;
+}
+
+/* ─── INPUTS ─── */
+input, select, textarea{
+    width:100%;
+    padding:10px 14px;
+    font-size:14px;
+    border:1.5px solid #c5d5ea;
+    border-radius:8px;
+    background:#f8fbff;
+    color:#1a1a2e;
+    transition:border .2s, box-shadow .2s, background .2s;
+    outline:none;
+}
+input:focus, select:focus, textarea:focus{
+    border-color:#1a73e8;
+    background:#ffffff;
+    box-shadow:0 0 0 3px rgba(26,115,232,.12);
+}
+input::placeholder{
+    color:#9fb4cc;
+}
+textarea{
+    min-height:80px;
+    resize:vertical;
+}
+select{
+    cursor:pointer;
+    appearance:none;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%231a73e8' stroke-width='2' fill='none'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;
+    background-position:right 14px center;
+    padding-right:36px;
+}
+
+/* ─── BUTTONS ─── */
+.btn-row{
+    display:flex;
+    gap:12px;
+    margin-top:28px;
+    justify-content:center;
+}
+button{
+    padding:12px 32px;
+    font-size:15px;
+    font-weight:600;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    transition:background .25s, transform .15s, box-shadow .25s;
+    letter-spacing:.3px;
+}
+button[type="submit"]{
+    background:linear-gradient(135deg,#1a73e8,#0d5bca);
+    color:#ffffff;
+    box-shadow:0 4px 14px rgba(26,115,232,.35);
+}
+button[type="submit"]:hover{
+    background:linear-gradient(135deg,#1667d1,#0b4fb5);
+    transform:translateY(-1px);
+    box-shadow:0 6px 20px rgba(26,115,232,.4);
+}
+button[type="submit"]:active{
+    transform:translateY(0);
+}
+button[type="button"]{
+    background:#ffffff;
+    color:#1a73e8;
+    border:2px solid #1a73e8;
+}
+button[type="button"]:hover{
+    background:#e8f0fe;
+}
+
+/* ─── PREVIEW AREA (on-screen preview, shown before printing) ─── */
+.preview-section{
+    max-width:920px;
+    margin:0 auto 30px;
+    display:none;
+}
+.preview-section .preview-toolbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:14px;
+}
+.preview-section .preview-toolbar h3{
+    color:#003366;
+    font-size:18px;
+}
+
+/* ─── PRINT AREA (unchanged layout for actual print) ─── */
+.print-area{
+    display:none;
+    width:900px;
+    margin:auto;
+    border:1px solid black;
+    padding:20px;
+    background:#ffffff;
+}
+.print-area table{
+    width:100%;
+    border-collapse:collapse;
+}
+.print-area td{
+    border:1px solid black;
+    padding:8px;
+    font-size:14px;
+}
+.title{
+    text-align:center;
+    font-weight:bold;
+    font-size:18px;
+}
+.center{
+    text-align:center;
+}
+.bold{
+    font-weight:bold;
+}
+.print-logo{
+    text-align:center;
+    margin-bottom:10px;
+}
+.print-logo img{
+    height:90px;
+}
+
+/* ─── FOOTER ─── */
+.footer{
+    text-align:center;
+    color:#8ea6c4;
+    font-size:12px;
+    margin-top:40px;
+}
+
+/* ─── PRINT MEDIA (unchanged) ─── */
+@media print{
+    body *{
+        visibility:hidden;
+    }
+    .print-area, .print-area *{
+        visibility:visible;
+    }
+    .print-area{
+        position:absolute;
+        left:0;
+        top:0;
+        border:1px solid black;
+        background:#ffffff;
+    }
+}
+
+/* ─── RESPONSIVE ─── */
+@media(max-width:600px){
+    .form-container{
+        padding:24px 18px;
+    }
+    .field-row{
+        grid-template-columns:1fr;
+    }
+    .btn-row{
+        flex-direction:column;
+    }
+    button{
+        width:100%;
+    }
+}
+</style>
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<div class="logo">
+    <img src="logo.png" alt="Company Logo">
+</div>
+<div class="page-title">Leave Application Form</div>
+<div class="page-subtitle">Fill in the details below to generate your leave application</div>
+
+<!-- ── FORM ── -->
+<form class="form-container" id="leaveForm" onsubmit="generate(event)">
+
+    <div class="section-heading">Employee Information</div>
+
+    <div class="field-row">
+        <div class="field-group">
+            <label for="name">Name of Employee</label>
+            <input type="text" id="name" placeholder="e.g. Juan Dela Cruz" required>
+        </div>
+        <div class="field-group">
+            <label for="status">Employment Status</label>
+            <input type="text" id="status" placeholder="e.g. Regular" required>
+        </div>
+    </div>
+
+    <div class="field-row">
+        <div class="field-group">
+            <label for="designation">Designation</label>
+            <input type="text" id="designation" placeholder="e.g. Software Engineer" required>
+        </div>
+        <div class="field-group">
+            <label for="division">Area / Division</label>
+            <input type="text" id="division" placeholder="e.g. IT Department" required>
+        </div>
+    </div>
+
+    <div class="section-heading">Leave Details</div>
+
+    <div class="field-row">
+        <div class="field-group">
+            <label for="datefiled">Date Filed</label>
+            <input type="date" id="datefiled" required>
+        </div>
+        <div class="field-group">
+            <label for="nature">Nature of Leave</label>
+            <select id="nature" required>
+                <option value="">-- Select Leave Type --</option>
+                <option>Vacation Leave</option>
+                <option>Sick Leave</option>
+                <option>Maternity/Paternity Leave</option>
+                <option>Mandatory Leave</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="field-row">
+        <div class="field-group">
+            <label for="paytype">With Pay / Without Pay</label>
+            <select id="paytype" required>
+                <option value="">-- Select Pay Type --</option>
+                <option>With Pay</option>
+                <option>Without Pay</option>
+            </select>
+        </div>
+        <div class="field-group">
+            <!-- spacer or extra field -->
+        </div>
+    </div>
+
+    <div class="section-heading">Duration</div>
+
+    <div class="field-row">
+        <div class="field-group">
+            <label for="from">From</label>
+            <input type="date" id="from" required>
+        </div>
+        <div class="field-group">
+            <label for="to">To</label>
+            <input type="date" id="to" required>
+        </div>
+    </div>
+
+    <div class="field-row">
+        <div class="field-group">
+            <label for="days">Total Leave Days</label>
+            <input type="number" id="days" min="0.5" step="0.5" placeholder="e.g. 3" required>
+        </div>
+        <div class="field-group">
+            <label for="hours">Total Hours</label>
+            <input type="number" id="hours" min="0" placeholder="e.g. 24" required>
+        </div>
+    </div>
+
+    <div class="section-heading">Reason &amp; Approval</div>
+
+    <div class="field-row full">
+        <div class="field-group">
+            <label for="reason">Reason</label>
+            <textarea id="reason" placeholder="State your reason for leave…" required></textarea>
+        </div>
+    </div>
+
+    <div class="field-row">
+        <div class="field-group">
+            <label for="supervisor">Supervisor Name</label>
+            <input type="text" id="supervisor" placeholder="e.g. Maria Santos" required>
+        </div>
+        <div class="field-group">
+            <label for="ceo">President / CEO Name</label>
+            <input type="text" id="ceo" placeholder="e.g. Jose Rizal" required>
+        </div>
+    </div>
+
+    <div class="btn-row">
+        <button type="button" onclick="document.getElementById('leaveForm').reset();">Clear Form</button>
+        <button type="submit">Generate &amp; Print</button>
+    </div>
+</form>
+
+<!-- ── PRINT AREA (unchanged for print output) ── -->
+<div class="print-area" id="printArea">
+    <div class="print-logo">
+        <img src="logo.png" alt="Company Logo">
+    </div>
+    <table>
+        <tr>
+            <td colspan="6" class="title">APPLICATION FOR LEAVE OF ABSENCE</td>
+        </tr>
+        <tr>
+            <td>Name of Employee:</td>
+            <td colspan="3" class="bold" id="p_name"></td>
+            <td>Date Filed:</td>
+            <td class="bold" id="p_datefiled"></td>
+        </tr>
+        <tr>
+            <td>Employment Status:</td>
+            <td id="p_status"></td>
+            <td>Designation:</td>
+            <td id="p_designation"></td>
+            <td>Area/Division:</td>
+            <td id="p_division"></td>
+        </tr>
+        <tr>
+            <td>Nature of Leave:</td>
+            <td colspan="5" id="p_nature"></td>
+        </tr>
+        <tr>
+            <td>Inclusive Dates:</td>
+            <td colspan="2">From: <span id="p_from"></span></td>
+            <td colspan="2">To: <span id="p_to"></span></td>
+            <td>
+                Days: <span id="p_days"></span><br>
+                Hours: <span id="p_hours"></span>
+            </td>
+        </tr>
+        <tr>
+            <td>Reason/s For Leave:</td>
+            <td colspan="5" id="p_reason"></td>
+        </tr>
+        <tr style="height:80px;">
+            <td colspan="2" class="center">
+                <br><br>
+                <span id="p_name2" class="bold"></span><br>
+                Employee
+            </td>
+            <td colspan="2" class="center">
+                <br><br>
+                <span id="p_supervisor" class="bold"></span><br>
+                Supervisor
+            </td>
+            <td colspan="2" class="center">
+                <br><br>
+                <span id="p_ceo" class="bold"></span><br>
+                President/CEO
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="footer">© Leave Application System &bull; White &amp; Blue Theme</div>
+
+<script>
+function formatDate(dateStr){
+    if(!dateStr) return "";
+    const d = new Date(dateStr);
+    return d.toLocaleDateString('en-US',{
+        year:'numeric',
+        month:'long',
+        day:'numeric'
+    });
+}
+
+function generate(event){
+    event.preventDefault();
 
     const form = document.getElementById("leaveForm");
     if(!form.checkValidity()){
@@ -50,4 +517,4 @@
 }
 </script>
 </body>
-    </html>
+</html>
