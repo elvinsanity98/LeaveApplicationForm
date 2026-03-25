@@ -176,24 +176,7 @@ button[type="button"]:hover{
     background:#e8f0fe;
 }
 
-/* ─── PREVIEW AREA (on-screen preview, shown before printing) ─── */
-.preview-section{
-    max-width:920px;
-    margin:0 auto 30px;
-    display:none;
-}
-.preview-section .preview-toolbar{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:14px;
-}
-.preview-section .preview-toolbar h3{
-    color:#003366;
-    font-size:18px;
-}
-
-/* ─── PRINT AREA (unchanged layout for actual print) ─── */
+/* ─── PRINT AREA (screen: hidden until generated) ─── */
 .print-area{
     display:none;
     width:900px;
@@ -238,20 +221,70 @@ button[type="button"]:hover{
     margin-top:40px;
 }
 
-/* ─── PRINT MEDIA (unchanged) ─── */
+/* ═══════════════════════════════════════════════════
+   PRINT MEDIA — Only show .print-area, nothing else
+   ═══════════════════════════════════════════════════ */
 @media print{
-    body *{
-        visibility:hidden;
+    /* Kill body background, padding, margin */
+    html, body{
+        background:none !important;
+        background-color:#ffffff !important;
+        margin:0 !important;
+        padding:0 !important;
+        min-height:auto !important;
     }
-    .print-area, .print-area *{
-        visibility:visible;
+
+    /* Hide EVERYTHING first */
+    body > *{
+        display:none !important;
+        visibility:hidden !important;
     }
+
+    /* Show ONLY the print area */
+    body > .print-area{
+        display:block !important;
+        visibility:visible !important;
+        position:absolute !important;
+        left:0 !important;
+        top:0 !important;
+        width:100% !important;
+        margin:0 !important;
+        padding:15px !important;
+        border:none !important;
+        background:#ffffff !important;
+        box-shadow:none !important;
+    }
+
+    .print-area *{
+        visibility:visible !important;
+    }
+
+    .print-area table{
+        width:100% !important;
+    }
+
+    .print-area td{
+        border:1px solid black !important;
+    }
+
+    /* Prevent blank pages */
     .print-area{
-        position:absolute;
-        left:0;
-        top:0;
-        border:1px solid black;
-        background:#ffffff;
+        page-break-inside:avoid;
+        page-break-after:auto;
+    }
+
+    /* Remove any leftover spacing */
+    .logo,
+    .page-title,
+    .page-subtitle,
+    .form-container,
+    .footer,
+    .btn-row{
+        display:none !important;
+        height:0 !important;
+        overflow:hidden !important;
+        margin:0 !important;
+        padding:0 !important;
     }
 }
 
@@ -336,9 +369,7 @@ button[type="button"]:hover{
                 <option>Without Pay</option>
             </select>
         </div>
-        <div class="field-group">
-            <!-- spacer or extra field -->
-        </div>
+        <div class="field-group"></div>
     </div>
 
     <div class="section-heading">Duration</div>
@@ -391,7 +422,7 @@ button[type="button"]:hover{
     </div>
 </form>
 
-<!-- ── PRINT AREA (unchanged for print output) ── -->
+<!-- ── PRINT AREA (unchanged layout) ── -->
 <div class="print-area" id="printArea">
     <div class="print-logo">
         <img src="logo.png" alt="Company Logo">
@@ -451,7 +482,7 @@ button[type="button"]:hover{
     </table>
 </div>
 
-<div class="footer">© Leave Application System &bull; White &amp; Blue Theme</div>
+<div class="footer">© Leave Application System</div>
 
 <script>
 function formatDate(dateStr){
